@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKiba - Plateforme Médicale Port-Gentil</title>
+  <link rel="stylesheet" href="akiba-simple.css">
+  <!-- Styles déplacés dans akiba-simple.css -->
+</head>
+<body>
+  <!-- En-tête -->
+  <header class="header">
+    <div class="container nav-flex">
+      <div class="logo">
+        <span class="logo-icon">+</span>
+        <span class="logo-akiba">AKiba</span>
+      </div>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#accueil" class="nav-link nav-link-green">Accueil</a></li>
+          <li><a href="#apropos" class="nav-link nav-link-blue">À propos</a></li>
+          <li><a href="#contact" class="nav-link nav-link-purple">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Accueil -->
+  <section id="accueil" class="section hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Bienvenue sur <span class="akiba-green">AKiba</span></h1>
+        <p class="hero-desc">La plateforme digitale qui révolutionne l'accès aux médicaments à Port-Gentil.</p>
+        <a href="#contact" class="btn btn-primary">Nous contacter</a>
+      </div>
+      <div class="hero-img">
+        <img src="medecin et sa patiente.jpg" alt="Visuel AKiba" class="hero-img-main" />
+      </div>
+    </div>
+  </section>
+
+  <!-- À propos -->
+  <section id="apropos" class="section about">
+    <div class="container">
+      <h2 class="about-title">À propos d'AKiba</h2>
+      <p class="about-desc">Notre mission : <span class="about-mission">aider les médecins et les patients à consulter en temps réel les stocks de médicaments</span> dans les pharmacies de Port-Gentil. AKiba simplifie la recherche, la disponibilité et l'accès aux traitements essentiels pour tous.</p>
+    </div>
+  </section>
+
+  <!-- Section Contact Moderne -->
+  <section id="contact" class="contact-section">
+    <div class="container contact-flex">
+      <div class="contact-info">
+        <h2>Contactez-nous</h2>
+        <p>Une question, un besoin&nbsp;? L’équipe AKiba vous répond rapidement.</p>
+        <ul class="contact-list">
+          <li><strong>Email :</strong> <a href="mailto:feriolentsame@gmail.com" class="contact-link">feriolentsame@gmail.com</a></li>
+          <li><strong>Téléphone :</strong> <a href="tel:+24174194335" class="contact-link">+241 74 19 43 35</a></li>
+        </ul>
+        <div class="contact-social">
+          <a href="https://facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><img src="facebook.png" alt="Facebook" class="social-icon social-facebook"></a>
+          <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="linkedin.png" alt="LinkedIn" class="social-icon social-linkedin"></a>
+          <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><img src="github.png" alt="GitHub" class="social-icon social-github"></a>
+        </div>
+      </div>
+      <form class="contact-form" autocomplete="off" onsubmit="event.preventDefault(); alert('Message envoyé !'); this.reset();">
+        <div class="form-row">
+          <input type="text" name="nom" placeholder="Votre nom" required>
+          <input type="email" name="email" placeholder="Votre email" required>
+        </div>
+        <textarea name="message" rows="4" placeholder="Votre message..." required></textarea>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer Moderne -->
+  <footer class="footer-modern">
+    <div class="container footer-modern-flex">
+      <div class="footer-brand">
+        <span class="logo-icon">+</span> <span class="logo-akiba">AKiba</span>
+      </div>
+      <div class="footer-links">
+        <a href="#accueil" class="nav-link nav-link-green">Accueil</a>
+        <a href="#apropos" class="nav-link nav-link-blue">À propos</a>
+        <a href="#contact" class="nav-link nav-link-purple">Contact</a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2025 AKiba. Tous droits réservés.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKiba - Plateforme Médicale Port-Gentil</title>
+    <link rel="stylesheet" href="STYLE.CSS">
+    <style>
+        /* Effets 3D et animations avancées */
+        .stat-card, .pharmacy-card, .user-dashboard, .chatbot-window, .payment-option, .btn, .login-container {
+            box-shadow: 0 8px 32px 0 rgba(30,58,138,0.15), 0 1.5px 6px 0 rgba(34,197,94,0.10);
+            transition: transform 0.4s cubic-bezier(.25,1.7,.45,.87), box-shadow 0.3s;
+            will-change: transform, box-shadow;
+            /* On retire le fond blanc transparent ici pour laisser les couleurs d'origine */
+            backdrop-filter: none;
+        }
+        .stat-card:hover, .pharmacy-card:hover, .payment-option:hover, .btn:hover, .login-container:hover {
+            transform: translateY(-8px) scale(1.04) rotateY(4deg) skewY(1deg);
+            box-shadow: 0 16px 48px 0 rgba(30,58,138,0.25), 0 3px 12px 0 rgba(34,197,94,0.18);
+        }
+        .dashboard-stats, .map-grid {
+            perspective: 1200px;
+        }
+        .pharmacy-card {
+            transform-style: preserve-3d;
+        }
+        .pharmacy-card:hover {
+            transform: rotateY(8deg) scale(1.05);
+        }
+        .map-pin {
+            box-shadow: 0 4px 16px rgba(30,58,138,0.25);
+            transition: transform 0.3s cubic-bezier(.25,1.7,.45,.87), box-shadow 0.3s;
+        }
+        .map-pin:hover {
+            transform: scale(1.3) rotateZ(-10deg) translateY(-8px);
+            box-shadow: 0 8px 32px rgba(34,197,94,0.25);
+            z-index: 2;
+        }
+        .chatbot-window {
+            box-shadow: 0 12px 40px 0 rgba(124,58,237,0.18), 0 2px 8px 0 rgba(30,58,138,0.10);
+            border: 1.5px solid var(--primary-purple);
+            animation: chatbotPop 0.7s cubic-bezier(.25,1.7,.45,.87);
+            /* On retire le fond blanc transparent ici pour laisser la couleur d'origine */
+            backdrop-filter: none;
+        }
+        @keyframes chatbotPop {
+            0% { transform: scale(0.7) rotateY(30deg); opacity: 0; }
+            80% { transform: scale(1.05) rotateY(-5deg); opacity: 1; }
+            100% { transform: scale(1) rotateY(0); opacity: 1; }
+        }
+        .page {
+            animation: fadeIn3D 0.7s cubic-bezier(.25,1.7,.45,.87);
+        }
+        @keyframes fadeIn3D {
+            0% { opacity: 0; transform: translateY(40px) scale(0.98) rotateX(10deg); }
+            80% { opacity: 1; transform: translateY(-8px) scale(1.02) rotateX(-2deg); }
+            100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0); }
+        }
+        .btn:active {
+            transform: scale(0.97) rotateY(-2deg);
+        }
+        .logo-icon {
+            box-shadow: 0 2px 8px rgba(34,197,94,0.18);
+            background: linear-gradient(135deg, #fff, #bbf7d0 60%);
+        }
+        .login-container {
+            border: 1.5px solid var(--primary-blue);
+        }
+        /* Animation de fond sur la page d'accueil */
+        body {
+            background: linear-gradient(120deg, rgba(248,250,252,0.85) 0%, rgba(224,231,255,0.85) 100%), url('medecin et sa patiente.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        /* Styles pour le logo en forme de pilule */
+        .header-akiba {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .logo-pill {
+            display: inline-block;
+            width: 120px;
+            height: 60px;
+            overflow: hidden;
+            border-radius: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        .logo-img-pill {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+    </style>
+<main class="main-content">
+    <!-- Header avec le logo en forme de pilule -->
+    <header class="header-akiba">
+        <div class="logo-pill">
+            <img src="myAKiba.jpg" alt="Logo AKiba" class="logo-img-pill">
+        </div>
+    </header>
+
+    <!-- Page d'accueil -->
+    <div id="accueil" class="page active">
+        <section class="hero">
+            <h1>Bienvenue sur AKiba</h1>
+            <p>La plateforme digitale qui révolutionne l'accès aux médicaments à Port-Gentil</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary" onclick="showPage('connexion')">Se connecter</a>
+                <a href="#" class="btn btn-secondary" onclick="showPage('client')">Rechercher un médicament</a>
+            </div>
+        </section>
+
+        <section class="search-container">
+            <h2 class="map-title">Recherche rapide de médicaments</h2>
+            <div class="search-form">
+                <input type="text" class="search-input" placeholder="Rechercher un médicament par nom ou indication...">
+                <button class="search-btn">Rechercher</button>
+            </div>
+            <p style="color: var(--gray); text-align: center;">Trouvez instantanément les médicaments disponibles dans les pharmacies de Port-Gentil</p>
+        </section>
+
+        <section class="map-container">
+            <h2 class="map-title">Nos valeurs ajoutées</h2>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Pharmacies partenaires</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24h/24</div>
+                    <div class="stat-label">Suivi en temps réel</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Sécurisé</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page Carte -->
+    <div id="carte" class="page">
+        <section class="map-container">
+            <h2 class="map-title">Pharmacies de Port-Gentil</h2>
+            <div class="map-grid">
+                <div class="pharmacies-list">
+                    <div class="pharmacy-card">
+                        <div class="pharmacy-name">Pharmacie Banco</div>
+                        <div class="pharmacy-stock">
+                            <span>Paracétamol: 45</span>
+                            <span>Amoxicilline: 23</span>
+                            <span>Aspirine: 67</span>
+                            <span>Doliprane: 12</span>
+                        </div>
+                    </div>
+                    <div class="pharmacy-card">
+                        <div class="pharmacy-name">Pharmacie Cap</div>
+                        <div class="pharmacy-stock">
+                            <span>Ibuprofène: 34</span>
+                            <span>Métronidazole: 18</span>
+                            <span>Vitamine C: 56</span>
+                            <span>Antiseptique: 29</span>
+                        </div>
+                    </div>
+                    <div class="pharmacy-card">
+                        <div class="pharmacy-name">Pharmacie Grand Village</div>
+                        <div class="pharmacy-stock">
+                            <span>Antihistaminique: 41</span>
+                            <span>Cortisone: 15</span>
+                            <span>Antispasmodique: 38</span>
+                            <span>Sirop toux: 22</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="interactive-map">
+                    <div class="map-pin" title="Pharmacie Banco">1</div>
+                    <div class="map-pin" title="Pharmacie Cap">2</div>
+                    <div class="map-pin" title="Pharmacie Grand Village">3</div>
+                    <div class="map-label">Port-Gentil</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page Connexion -->
+    <div id="connexion" class="page">
+        <div class="login-container">
+            <div class="login-tabs">
+                <div class="login-tab active" onclick="showLoginForm('medecin')">Médecin</div>
+                <div class="login-tab" onclick="showLoginForm('pharmacie')">Pharmacie</div>
+                <div class="login-tab" onclick="showLoginForm('admin')">Admin</div>
+            </div>
+
+            <form class="login-form active" id="medecin-form">
+                <div class="form-group">
+                    <label class="form-label">Numéro d'ordre:</label>
+                    <input type="text" class="form-input" placeholder="Entrez votre numéro d'ordre">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe:</label>
+                    <input type="password" class="form-input" placeholder="Entrez votre mot de passe">
+                </div>
+                <button type="button" class="btn btn-primary" style="width: 100%;" onclick="login('medecin')">Se connecter</button>
+            </form>
+
+            <form class="login-form" id="pharmacie-form">
+                <div class="form-group">
+                    <label class="form-label">Code pharmacie:</label>
+                    <input type="text" class="form-input" placeholder="Entrez votre code pharmacie">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe:</label>
+                    <input type="password" class="form-input" placeholder="Entrez votre mot de passe">
+                </div>
+                <button type="button" class="btn btn-primary" style="width: 100%;" onclick="login('pharmacie')">Se connecter</button>
+            </form>
+
+            <form class="login-form" id="admin-form">
+                <div class="form-group">
+                    <label class="form-label">Identifiant administrateur:</label>
+                    <input type="text" class="form-input" placeholder="Entrez votre identifiant">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe:</label>
+                    <input type="password" class="form-input" placeholder="Entrez votre mot de passe">
+                </div>
+                <button type="button" class="btn btn-primary" style="width: 100%;" onclick="login('admin')">Se connecter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Espace Client -->
+    <div id="client" class="page">
+        <section class="search-container">
+            <h2 class="map-title">Recherche de médicaments</h2>
+            <div class="search-form">
+                <input type="text" class="search-input" placeholder="Rechercher un médicament...">
+                <button class="search-btn">Rechercher</button>
+            </div>
+            
+            <div class="payment-options">
+                <div class="payment-option">
+                    <strong>Airtel Money</strong>
+                    <p>Paiement mobile</p>
+                </div>
+                <div class="payment-option">
+                    <strong>Moov Money</strong>
+                    <p>Paiement mobile</p>
+                </div>
+                <div class="payment-option">
+                    <strong>Espèces</strong>
+                    <p>Paiement direct</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="map-container">
+            <h2 class="map-title">Pharmacies de garde</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Pharmacie</th>
+                        <th>Adresse</th>
+                        <th>Statut</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pharmacie Banco</td>
+                        <td>Avenue Savorgnan de Brazza</td>
+                        <td><span class="status-badge status-disponible">Ouverte</span></td>
+                        <td>+241 01 23 45 67</td>
+                    </tr>
+                    <tr>
+                        <td>Pharmacie Cap</td>
+                        <td>Quartier Cap Lopez</td>
+                        <td><span class="status-badge status-disponible">Ouverte</span></td>
+                        <td>+241 01 23 45 68</td>
+                    </tr>
+                    <tr>
+                        <td>Pharmacie Grand Village</td>
+                        <td>Grand Village Centre</td>
+                        <td><span class="status-badge status-rupture">Fermée</span></td>
+                        <td>+241 01 23 45 69</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Espace Médecin -->
+    <div id="medecin" class="page">
+        <section class="user-dashboard">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Dashboard Médecin</h2>
+                <button class="btn btn-secondary" onclick="showPage('accueil')">Déconnexion</button>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">Prescriptions ce mois</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Patients consultés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">89%</div>
+                    <div class="stat-label">Médicaments disponibles</div>
+                </div>
+            </div>
+
+            <div class="search-form">
+                <input type="text" class="search-input" placeholder="Rechercher un médicament par nom ou indication...">
+                <button class="search-btn">Vérifier les stocks</button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Médicament</th>
+                        <th>Pharmacie Banco</th>
+                        <th>Pharmacie Cap</th>
+                        <th>Pharmacie Grand Village</th>
+                        <th>Statut global</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Paracétamol 500mg</td>
+                        <td>45 unités</td>
+                        <td>23 unités</td>
+                        <td>67 unités</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td>Amoxicilline 250mg</td>
+                        <td>12 unités</td>
+                        <td>8 unités</td>
+                        <td>0 unités</td>
+                        <td><span class="status-badge status-faible">Stock faible</span></td>
+                    </tr>
+                    <tr>
+                        <td>Aspirine 100mg</td>
+                        <td>0 unités</td>
+                        <td>0 unités</td>
+                        <td>0 unités</td>
+                        <td><span class="status-badge status-rupture">Rupture</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Espace Pharmacie -->
+    <div id="pharmacie" class="page">
+        <section class="user-dashboard">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Dashboard Pharmacie</h2>
+                <button class="btn btn-secondary" onclick="showPage('accueil')">Déconnexion</button>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">234</div>
+                    <div class="stat-label">Médicaments en stock</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Ruptures de stock</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Péremptions proches</div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <h3>Mise à jour des stocks</h3>
+                <form class="search-form">
+                    <input type="text" class="search-input" placeholder="Nom du médicament" style="flex: 2;">
+                    <input type="number" class="search-input" placeholder="Quantité" style="flex: 1;">
+                    <input type="date" class="search-input" style="flex: 1;">
+                    <button type="button" class="search-btn">Ajouter</button>
+                </form>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Médicament</th>
+                        <th>Quantité</th>
+                        <th>Prix unitaire</th>
+                        <th>Date péremption</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Paracétamol 500mg</td>
+                        <td>45</td>
+                        <td>500 FCFA</td>
+                        <td>12/2025</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Modifier</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Amoxicilline 250mg</td>
+                        <td>12</td>
+                        <td>1200 FCFA</td>
+                        <td>08/2025</td>
+                        <td><span class="status-badge status-faible">Stock faible</span></td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Modifier</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Aspirine 100mg</td>
+                        <td>0</td>
+                        <td>300 FCFA</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-rupture">Rupture</span></td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Réapprovisionner</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Espace Admin -->
+    <div id="admin" class="page">
+        <section class="user-dashboard">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Dashboard Administrateur</h2>
+                <button class="btn btn-secondary" onclick="showPage('accueil')">Déconnexion</button>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">Médecins actifs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Pharmacies partenaires</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1,234</div>
+                    <div class="stat-label">Patients enregistrés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">89%</div>
+                    <div class="stat-label">Taux de satisfaction</div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <h3>Gestion des utilisateurs</h3>
+                <div class="search-form">
+                    <input type="text" class="search-input" placeholder="Rechercher un utilisateur...">
+                    <button class="search-btn">Rechercher</button>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Type</th>
+                        <th>Email</th>
+                        <th>Statut</th>
+                        <th>Dernière connexion</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dr. Mboma Jean</td>
+                        <td>Médecin</td>
+                        <td>j.mboma@email.com</td>
+                        <td><span class="status-badge status-disponible">Actif</span></td>
+                        <td>Il y a 2h</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Modifier</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pharmacie Banco</td>
+                        <td>Pharmacie</td>
+                        <td>banco@pharmacy.ga</td>
+                        <td><span class="status-badge status-disponible">Actif</span></td>
+                        <td>Il y a 1h</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Modifier</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pharmacie Cap</td>
+                        <td>Pharmacie</td>
+                        <td>cap@pharmacy.ga</td>
+                        <td><span class="status-badge status-faible">Inactif</span></td>
+                        <td>Il y a 1 jour</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Réactiver</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+<!-- Chatbot Arty -->
+<div class="chatbot">
+    <div class="chatbot-toggle" onclick="toggleChatbot()" style="padding:0;">
+        <img src="my chatb.jpeg" alt="Chatbot" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; display: block;">
+    </div>
+    <div class="chatbot-window" id="chatbot-window">
+        <div class="chatbot-header" style="display: flex; align-items: center; gap: 0.7rem; justify-content: center;">
+            <img src="my chatb.jpeg" alt="Arty Chatbot" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(30,58,138,0.15); border: 2px solid var(--primary-green); background: white;">
+            <span>Arty - Assistant AKiba</span>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+            <div class="chatbot-message bot">
+                Bonjour ! Je suis Arty, votre assistant AKiba. Comment puis-je vous aider aujourd'hui ?
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-input" placeholder="Tapez votre message...">
+            <button onclick="sendMessage()">Envoyer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Variables globales pour la gestion de l'état
+    let currentUser = null;
+    let chatbotOpen = false;
+
+    // Fonction pour afficher une page
+    function showPage(pageId) {
+        // Cacher toutes les pages
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => page.classList.remove('active'));
+        
+        // Afficher la page demandée
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+            targetPage.classList.add('active');
+        }
+    }
+
+    // Fonction pour gérer les onglets de connexion
+    function showLoginForm(userType) {
+        // Réinitialiser les onglets
+        const tabs = document.querySelectorAll('.login-tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Activer l'onglet sélectionné
+        event.target.classList.add('active');
+        
+        // Cacher tous les formulaires
+        const forms = document.querySelectorAll('.login-form');
+        forms.forEach(form => form.classList.remove('active'));
+        
+        // Afficher le formulaire correspondant
+        const targetForm = document.getElementById(`${userType}-form`);
+        if (targetForm) {
+            targetForm.classList.add('active');
+        }
+    }
+
+    // Fonction de connexion
+    function login(userType) {
+        // Simulation de la connexion
+        currentUser = userType;
+        
+        // Afficher un message de succès
+        alert(`Connexion réussie en tant que ${userType}`);
+        
+        // Rediriger vers le dashboard approprié
+        showPage(userType);
+    }
+
+    // Fonction pour basculer le chatbot
+    function toggleChatbot() {
+        const chatbotWindow = document.getElementById('chatbot-window');
+        chatbotOpen = !chatbotOpen;
+        
+        if (chatbotOpen) {
+            chatbotWindow.style.display = 'flex';
+        } else {
+            chatbotWindow.style.display = 'none';
+        }
+    }
+
+    // Fonction pour envoyer un message au chatbot
+    function sendMessage() {
+        const input = document.getElementById('chatbot-input');
+        const messagesContainer = document.getElementById('chatbot-messages');
+        const message = input.value.trim();
+        
+        if (message === '') return;
+        
+        // Ajouter le message de l'utilisateur
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('chatbot-message', 'user');
+        userMessage.textContent = message;
+        messagesContainer.appendChild(userMessage);
+        
+        // Vider le champ de saisie
+        input.value = '';
+        
+        // Simuler une réponse du bot après un délai
+        setTimeout(() => {
+            const botResponse = getBotResponse(message);
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('chatbot-message', 'bot');
+            botMessage.textContent = botResponse;
+            messagesContainer.appendChild(botMessage);
+            
+            // Faire défiler vers le bas
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 1000);
+        
+        // Faire défiler vers le bas
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Fonction pour générer une réponse du chatbot
+    function getBotResponse(message) {
+        const responses = {
+            'bonjour': 'Bonjour ! Bienvenue sur AKiba. Comment puis-je vous aider ?',
+            'aide': 'Je peux vous aider à trouver des médicaments, localiser des pharmacies ou vous connecter à votre espace.',
+            'pharmacie': 'Nous avons 3 pharmacies partenaires : Banco, Cap et Grand Village. Voulez-vous voir leurs stocks ?',
+            'médicament': 'Quel médicament recherchez-vous ? Je peux vérifier sa disponibilité dans nos pharmacies.',
+            'stock': 'Les stocks sont mis à jour en temps réel. Utilisez la recherche pour vérifier la disponibilité.',
+            'connexion': 'Cliquez sur "Connexion" dans le menu pour accéder à votre espace médecin, pharmacie ou admin.',
+            'paiement': 'Nous acceptons Airtel Money, Moov Money et les paiements en espèces.',
+            'horaires': 'Les horaires varient selon les pharmacies. Consultez la section "Pharmacies de garde".',
+            'contact': 'Pour nous contacter, utilisez les informations dans la section contact ou continuez à me parler !',
+            'merci': 'De rien ! N\'hésitez pas si vous avez d\'autres questions.'
+        };
+        
+        // Rechercher une réponse correspondante
+        for (let key in responses) {
+            if (message.toLowerCase().includes(key)) {
+                return responses[key];
+            }
+        }
+        
+        // Réponse par défaut
+        return 'Je comprends votre question. Pour plus d\'informations détaillées, n\'hésitez pas à explorer les différentes sections de la plateforme ou à contacter notre support.';
+    }
+
+    // Gestionnaire d'événements pour la touche Entrée dans le chatbot
+    document.getElementById('chatbot-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // Fonction pour simuler la sélection d'options de paiement
+    function selectPaymentOption(option) {
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        paymentOptions.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+    }
+
+    // Ajouter des événements aux options de paiement
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        paymentOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                selectPaymentOption(this);
+            });
+        });
+    });
+
+    // Fonction pour simuler la recherche de médicaments
+    function searchMedicament(query) {
+        if (query.trim() === '') return;
+        
+        // Simuler une recherche
+        const results = [
+            { name: 'Paracétamol 500mg', pharmacy: 'Banco', stock: 45, price: '500 FCFA' },
+            { name: 'Paracétamol 500mg', pharmacy: 'Cap', stock: 23, price: '520 FCFA' },
+            { name: 'Paracétamol 500mg', pharmacy: 'Grand Village', stock: 67, price: '480 FCFA' }
+        ];
+        
+        // Afficher les résultats (simulation)
+        console.log('Résultats de recherche:', results);
+        alert(`Trouvé ${results.length} résultats pour "${query}"`);
+    }
+
+    // Ajouter des événements aux boutons de recherche
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchButtons = document.querySelectorAll('.search-btn');
+        searchButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                if (input && input.classList.contains('search-input')) {
+                    searchMedicament(input.value);
+                }
+            });
+        });
+    });
+
+    // Fonction pour simuler la mise à jour des stocks (pharmacie)
+    function updateStock(medicament, quantite, date) {
+        // Simuler la mise à jour
+        console.log(`Stock mis à jour: ${medicament} - Quantité: ${quantite} - Date: ${date}`);
+        alert(`Stock mis à jour avec succès pour ${medicament}`);
+    }
+
+    // Animation des statistiques au chargement
+    function animateStats() {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.textContent);
+            let current = 0;
+            const increment = target / 50;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                stat.textContent = Math.floor(current);
+            }, 30);
+        });
+    }
+
+    // Initialisation au chargement de la page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animer les statistiques
+        setTimeout(animateStats, 500);
+        
+        // Ajouter des événements aux pins de la carte
+        const mapPins = document.querySelectorAll('.map-pin');
+        mapPins.forEach(pin => {
+            pin.addEventListener('click', function() {
+                const title = this.getAttribute('title');
+                alert(`Informations sur ${title}`);
+            });
+        });
+    });
+
+    // Fonction pour gérer les notifications
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            animation: slideIn 0.3s ease-out;
+            background: ${type === 'success' ? 'var(--success)' : 'var(--error)'};
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Fonction pour valider les formulaires
+    function validateForm(formId) {
+        const form = document.getElementById(formId);
+        const inputs = form.querySelectorAll('.form-input');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+            if (input.value.trim() === '') {
+                input.style.borderColor = 'var(--error)';
+                isValid = false;
+            } else {
+                input.style.borderColor = 'var(--light-gray)';
+            }
+        });
+        
+        return isValid;
+    }
+
+    // Ajouter des styles d'animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .map-pin:hover {
+            animation: pulse 0.5s ease-in-out;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Gestion du responsive menu (pour les petits écrans)
+    function toggleMobileMenu() {
+        const navMenu = document.querySelector('.nav-menu');
+        navMenu.classList.toggle('mobile-active');
+    }
+
+    // Messages prédéfinis pour le chatbot selon le contexte
+    const contextualMessages = {
+        'accueil': 'Bienvenue sur AKiba ! Explorez nos fonctionnalités pour trouver des médicaments facilement.',
+        'carte': 'Voici nos pharmacies partenaires à Port-Gentil. Cliquez sur les pins pour plus d\'informations.',
+        'connexion': 'Choisissez votre type de compte pour accéder à votre espace personnalisé.',
+        'client': 'Recherchez vos médicaments et trouvez les pharmacies qui les ont en stock.',
+        'medecin': 'Consultez les stocks en temps réel pour optimiser vos prescriptions.',
+        'pharmacie': 'Gérez vos stocks et tenez vos informations à jour.',
+        'admin': 'Supervisez l\'ensemble de la plateforme et gérez les utilisateurs.'
+    };
+
+    // Fonction pour adapter le message du chatbot selon la page active
+    function updateChatbotContext() {
+        const activePage = document.querySelector('.page.active');
+        if (activePage && contextualMessages[activePage.id]) {
+            // Mettre à jour le message d'accueil du chatbot
+            const firstMessage = document.querySelector('.chatbot-message.bot');
+            if (firstMessage) {
+                firstMessage.textContent = contextualMessages[activePage.id];
+            }
+        }
+    }
+
+    // Appeler la fonction de mise à jour du contexte lors du changement de page
+    const originalShowPage = showPage;
+    showPage = function(pageId) {
+        originalShowPage(pageId);
+        updateChatbotContext();
+    };
+
+    // Effet 4D tilt sur le logo pilule
+    const logo = document.querySelector('.logo-img-pill');
+    if (logo) {
+      logo.addEventListener('mousemove', function(e) {
+        const rect = logo.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * 10; // max 10deg
+        const rotateY = ((x - centerX) / centerX) * 10;
+        logo.style.transform = `scale(0.98) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+        logo.style.boxShadow = `0 8px 32px 0 rgba(30,58,138,0.15), 0 1.5px 6px 0 rgba(34,197,94,0.10)`;
+      });
+      logo.addEventListener('mouseleave', function() {
+        logo.style.transform = '';
+        logo.style.boxShadow = '';
+      });
+      logo.addEventListener('mousedown', function() {
+        logo.style.transform += ' scale(0.97) translateY(4px)';
+        logo.style.boxShadow = '0 2px 4px rgba(30,58,138,0.18)';
+      });
+      logo.addEventListener('mouseup', function() {
+        logo.style.transform = '';
+        logo.style.boxShadow = '';
+      });
+    }
+
+    // Effet parallax/mouse-follow sur le logo pilule
+    const logoPill = document.querySelector('.logo-img-pill');
+    if (logoPill) {
+      logoPill.addEventListener('mousemove', function(e) {
+        const rect = logoPill.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+        const centerY = rect.height / 2;
+        const translateY = ((y - centerY) / centerY) * 16; // max 16px
+        logoPill.style.transform = `translateY(${translateY}px)`;
+      });
+      logoPill.addEventListener('mouseleave', function() {
+        logoPill.style.transform = '';
+      });
+      logoPill.addEventListener('mousedown', function() {
+        logoPill.style.transform += ' scale(0.97)';
+      });
+      logoPill.addEventListener('mouseup', function() {
+        logoPill.style.transform = '';
+      });
+    }
+</script>
