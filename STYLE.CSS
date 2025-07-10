@@ -128,7 +128,10 @@ a {
     overflow: hidden;
     border: 2px solid var(--primary-color);
 }
-
+.pill-logo img{
+    width: 100%;
+    height: 100%;
+}
 .pill-logo.small {
     width: 40px;
     height: 24px;
@@ -179,10 +182,11 @@ a {
 
 /* Hero section */
 .hero-medical {
-    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
-                url('../assets/hero-bg.jpg') no-repeat center center/cover;
+    background: linear-gradient(rgba(255, 255, 255, 0.594), rgba(255, 255, 255, 0.694)), 
+                url('medecin-et-sa-patiente.jpg') no-repeat center center/cover;
     padding: 150px 0 100px;
     text-align: center;
+    background-attachment: fixed;
 }
 
 .hero-content h2 {
@@ -778,8 +782,14 @@ a {
     justify-content: center;
     font-size: 1.5rem;
     cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.646);
     transition: var(--transition);
+}
+.chatbot-toggle img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .chatbot-toggle:hover {
@@ -937,7 +947,54 @@ a {
     color: var(--secondary-color);
     margin-bottom: 30px;
 }
+/* Style pour le sélecteur de rôle */
+.role-selector {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
 
+.role-option input[type="radio"] {
+    display: none;
+}
+
+.role-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    border: 2px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    text-align: center;
+}
+
+.role-option i {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: var(--dark-gray);
+}
+
+.role-option input[type="radio"]:checked + label {
+    border-color: var(--primary-color);
+    background-color: rgba(34, 197, 94, 0.1);
+}
+
+.role-option input[type="radio"]:checked + label i {
+    color: var(--primary-color);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
 .close-modal {
     position: absolute;
     top: 15px;

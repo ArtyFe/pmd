@@ -14,7 +14,7 @@
             <div class="header-content">
                 <div class="logo-medical">
                     <div class="pill-logo">
-                        <img src="assets/myAKiba.jpg" alt="AKiba Medical">
+                        <img src="myAKiba.jpg" alt="AKiba Medical">
                     </div>
                     <h1>AKiba<span>Medical</span></h1>
                 </div>
@@ -329,7 +329,7 @@
                 <div class="footer-section">
                     <div class="logo-medical">
                         <div class="pill-logo small">
-                            <img src="assets/myAKiba.jpg" alt="AKiba Medical">
+                            <img src="myAKiba.jpg" alt="AKiba Medical">
                         </div>
                         <h3>AKiba<span>Medical</span></h3>
                     </div>
@@ -375,7 +375,7 @@
     <!-- Chatbot -->
     <div class="medical-chatbot">
         <div class="chatbot-toggle">
-            <i class="fas fa-comment-medical"></i>
+            <img src="my chatb.jpeg" alt="">
         </div>
         <div class="chatbot-window">
             <div class="chatbot-header">
@@ -423,39 +423,70 @@
     </div>
 
     <!-- Register Modal -->
-    <div class="modal" id="register-modal">
-        <div class="modal-content medical-modal">
-            <button class="close-modal"><i class="fas fa-times"></i></button>
-            <h2>Inscription</h2>
-            <form class="register-form">
+   <!-- Register Modal -->
+<div class="modal" id="register-modal">
+    <div class="modal-content medical-modal">
+        <button class="close-modal"><i class="fas fa-times"></i></button>
+        <h2>Inscription</h2>
+        <form class="register-form" id="registration-form">
+            <div class="form-row">
                 <div class="form-group">
-                    <label>Nom complet</label>
-                    <input type="text" placeholder="Entrez votre nom complet">
+                    <label>Prénom</label>
+                    <input type="text" placeholder="Entrez votre prénom" id="firstname" required>
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="Entrez votre email">
+                    <label>Nom</label>
+                    <input type="text" placeholder="Entrez votre nom" id="lastname" required>
                 </div>
-                <div class="form-group">
-                    <label>Téléphone</label>
-                    <input type="tel" placeholder="Entrez votre numéro">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="Entrez votre email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label>Rôle</label>
+                <div class="role-selector">
+                    <div class="role-option">
+                        <input type="radio" name="role" id="role-patient" value="patient" checked>
+                        <label for="role-patient">
+                            <i class="fas fa-user"></i>
+                            <span>Patient</span>
+                        </label>
+                    </div>
+                    <div class="role-option">
+                        <input type="radio" name="role" id="role-doctor" value="doctor">
+                        <label for="role-doctor">
+                            <i class="fas fa-user-md"></i>
+                            <span>Médecin</span>
+                        </label>
+                    </div>
+                    <div class="role-option">
+                        <input type="radio" name="role" id="role-pharmacist" value="pharmacist">
+                        <label for="role-pharmacist">
+                            <i class="fas fa-prescription-bottle-alt"></i>
+                            <span>Pharmacien</span>
+                        </label>
+                    </div>
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group">
                     <label>Mot de passe</label>
-                    <input type="password" placeholder="Créez un mot de passe">
+                    <input type="password" placeholder="Créez un mot de passe" id="password" required>
                 </div>
                 <div class="form-group">
-                    <label>Confirmer mot de passe</label>
-                    <input type="password" placeholder="Confirmez votre mot de passe">
+                    <label>Confirmation</label>
+                    <input type="password" placeholder="Confirmez le mot de passe" id="confirm-password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">S'inscrire</button>
-                <div class="form-footer">
-                    <p>Déjà un compte ? <a href="#" id="show-login">Se connecter</a></p>
-                </div>
-            </form>
-        </div>
+            </div>
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+            <div class="form-footer">
+                <p>Déjà un compte ? <a href="#" id="show-login">Se connecter</a></p>
+            </div>
+        </form>
     </div>
-
+</div>
     <script src="script.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>
