@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord Pharmacie</title>
+    <link rel="stylesheet" href="admin-pharmacie.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-prescription-bottle-alt"></i>
+                <h2>PharmaAdmin</h2>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a></li>
+                    <li><a href="#medicaments"><i class="fas fa-pills"></i> Médicaments</a></li>
+                    <li><a href="#clients"><i class="fas fa-users"></i> Clients</a></li>
+                    <li><a href="#commandes"><i class="fas fa-file-invoice-dollar"></i> Commandes</a></li>
+                    <li><a href="#statistiques"><i class="fas fa-chart-line"></i> Statistiques</a></li>
+                    <li><a href="#parametres"><i class="fas fa-cog"></i> Paramètres</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Profile">
+                <div class="user-info">
+                    <h4>Dr. Sophie Martin</h4>
+                    <p>Pharmacienne</p>
+                </div>
+            </div>
+            <button id="logout-btn" class="btn btn-outline">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active-section">
+                <header class="header">
+                    <h1>Tableau de bord</h1>
+                    <div class="header-actions">
+                        <div class="search-bar">
+                            <input type="text" placeholder="Rechercher...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Dashboard Cards -->
+                <div class="dashboard-cards">
+                    <!-- À compléter selon vos besoins -->
+                </div>
+
+                <!-- Recent Orders and Stock Alerts -->
+                <div class="content-section-grid" style="display: flex; gap: 32px;">
+                    <!-- Tableau des commandes récentes -->
+                    <div style="flex:2">
+                        <h2>Commandes récentes</h2>
+                        <table id="recent-orders-table" class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rempli par JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Alertes de stock -->
+                    <div style="flex:1">
+                        <h2>Alertes de stock</h2>
+                        <div id="alert-items"></div>
+                    </div>
+                </div>
+
+                <!-- Produits populaires -->
+                <div class="stats-section">
+                    <h2>Produits populaires</h2>
+                    <div id="top-products" style="display: flex; gap: 16px;"></div>
+                </div>
+            </section>
+
+            <!-- Medicaments Section -->
+            <section id="medicaments" class="content-section">
+                <header class="header">
+                    <h1>Gestion des Médicaments</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="add-medicament-btn">
+                            <i class="fas fa-plus"></i> Ajouter
+                        </button>
+                    </div>
+                </header>
+
+                <div class="medicaments-container">
+                    <div class="table-responsive">
+                        <table id="medicaments-table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Dosage</th>
+                                    <th>Forme</th>
+                                    <th>Stock</th>
+                                    <th>Prix</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="medicaments-list">
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Clients Section -->
+            <section id="clients" class="content-section">
+                <header class="header">
+                    <h1>Gestion des Clients</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="add-client-btn">
+                            <i class="fas fa-plus"></i> Ajouter
+                        </button>
+                    </div>
+                </header>
+
+                <div class="clients-container">
+                    <div class="filters">
+                        <div class="search-bar">
+                            <input type="text" id="client-search" placeholder="Rechercher un client...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select id="client-filter">
+                            <option value="all">Tous les clients</option>
+                            <option value="active">Clients actifs</option>
+                            <option value="inactive">Clients inactifs</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="clients-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Téléphone</th>
+                                    <th>Email</th>
+                                    <th>Dernière commande</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-list">
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Commandes Section -->
+            <section id="commandes" class="content-section">
+                <header class="header">
+                    <h1>Gestion des Commandes</h1>
+                    <div class="header-actions">
+                        <select id="order-filter">
+                            <option value="all">Toutes les commandes</option>
+                            <option value="pending">En attente</option>
+                            <option value="completed">Complétées</option>
+                            <option value="canceled">Annulées</option>
+                        </select>
+                    </div>
+                </header>
+
+                <div class="orders-container">
+                    <div class="table-responsive">
+                        <table id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>N° Commande</th>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Médicaments</th>
+                                    <th>Total</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-list">
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistiques Section -->
+            <section id="statistiques" class="content-section">
+                <header class="header">
+                    <h1>Statistiques et Rapports</h1>
+                    <div class="header-actions">
+                        <select id="stats-period">
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                            <option value="year">Cette année</option>
+                        </select>
+                    </div>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="chart-container">
+                        <h2>Ventes mensuelles</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="sales-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h2>Top médicaments</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="top-products-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <h2>Clients</h2>
+                        <div class="stats-data">
+                            <div class="stat-item">
+                                <h3 id="new-clients">0</h3>
+                                <p>Nouveaux ce mois</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3 id="total-clients">0</h3>
+                                <p>Total clients</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <h2>Commandes</h2>
+                        <div class="stats-data">
+                            <div class="stat-item">
+                                <h3 id="avg-order">0 Fcfa</h3>
+                                <p>Panier moyen</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3 id="total-sales">0 Fcfa</h3>
+                                <p>Chiffre d'affaires</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paramètres Section -->
+            <section id="parametres" class="content-section">
+                <header class="header">
+                    <h1>Paramètres</h1>
+                </header>
+
+                <div class="settings-container">
+                    <div class="settings-tabs">
+                        <button class="tab-btn active" data-tab="profile">Profil</button>
+                        <button class="tab-btn" data-tab="pharmacy">Pharmacie</button>
+                        <button class="tab-btn" data-tab="security">Sécurité</button>
+                    </div>
+
+                    <div class="tab-content active" id="profile-tab">
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label for="profile-photo">Photo de profil</label>
+                                <div class="profile-photo-container">
+                                    <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Profile" id="profile-photo-preview">
+                                    <input type="file" id="profile-photo" accept="image/*">
+                                    <button type="button" class="btn btn-secondary" id="change-photo-btn">Changer</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-name">Nom complet</label>
+                                <input type="text" id="profile-name" value="Dr. Sophie Martin">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-email">Email</label>
+                                <input type="email" id="profile-email" value="sophie.martin@pharma.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-phone">Téléphone</label>
+                                <input type="tel" id="profile-phone" value="+225 07 12 34 56 78">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </form>
+                    </div>
+
+                    <div class="tab-content" id="pharmacy-tab">
+                        <!-- Pharmacy settings content -->
+                    </div>
+
+                    <div class="tab-content" id="security-tab">
+                        <!-- Security settings content -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="medicament-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-title">Ajouter un médicament</h2>
+            <form id="medicament-form">
+                <div class="form-group">
+                    <label for="medicament-name">Nom du médicament</label>
+                    <input type="text" id="medicament-name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="medicament-dosage">Dosage</label>
+                        <input type="text" id="medicament-dosage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicament-form">Forme</label>
+                        <select id="medicament-form" required>
+                            <option value="">Sélectionner</option>
+                            <option value="comprime">Comprimé</option>
+                            <option value="capsule">Capsule</option>
+                            <option value="sirop">Sirop</option>
+                            <option value="injection">Injection</option>
+                            <option value="pommade">Pommade</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="medicament-stock">Stock</label>
+                        <input type="number" id="medicament-stock" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicament-price">Prix (Fcfa)</label>
+                        <input type="number" id="medicament-price" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="medicament-description">Description</label>
+                    <textarea id="medicament-description" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="cancel-medicament">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data.js"></script>
+    <script src="admin-pharmacie.js"></script>
+</body>
+</html>
