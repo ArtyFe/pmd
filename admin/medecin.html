@@ -1,21 +1,357 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta description="Tableau de bord pour les médecins">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Médecin - AKiba</title>
     <link rel="stylesheet" href="medecin.css">
-    <title>Medecin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
-    <h1>Tableau de bord medecin</h1>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-user-md"></i>
+                <h2>AKiba Médecin</h2>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a></li>
+                    <li><a href="#recherche"><i class="fas fa-search"></i> Recherche Médicaments</a></li>
+                    <li><a href="#prescriptions"><i class="fas fa-prescription-bottle-alt"></i> Mes Prescriptions</a></li>
+                    <li><a href="#historique"><i class="fas fa-history"></i> Historique</a></li>
+                    <li><a href="#parametres"><i class="fas fa-cog"></i> Paramètres</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile">
+                <div class="user-info">
+                    <h4>Dr. Jean Kouassi</h4>
+                    <p>Médecin Généraliste</p>
+                </div>
+            </div>
+            <button id="logout-btn" class="btn btn-outline">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </button>
+        </aside>
 
-<div class="logout">
-    <button id="logout-btn" class="btn btn-outline">
-        <i class="fas fa-sign-out-alt"></i> Déconnexion
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active-section">
+                <header class="header">
+                    <h1>Tableau de bord</h1>
+                    <div class="header-actions">
+                        <div class="search-bar">
+                            <input type="text" placeholder="Rechercher...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="language-selector">
+                            <select id="language">
+                                <option value="fr">Français</option>
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                                <option value="pt">Português</option>
+                                <option value="zh">中文</option>
+                            </select>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Dashboard Cards -->
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-icon" style="background-color: rgba(34, 197, 94, 0.1);">
+                            <i class="fas fa-prescription" style="color: var(--primary-color);"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3 id="prescriptions-count">0</h3>
+                            <p>Prescriptions ce mois</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" style="background-color: rgba(30, 58, 138, 0.1);">
+                            <i class="fas fa-search" style="color: var(--secondary-color);"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3 id="recherches-count">0</h3>
+                            <p>Recherches ce mois</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" style="background-color: rgba(124, 58, 237, 0.1);">
+                            <i class="fas fa-exclamation-triangle" style="color: var(--accent-color);"></i>
+                        </div>
+                        <div class="card-info">
+                            <h3 id="alertes-count">0</h3>
+                            <p>Alertes médicaments</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <section class="content-section-grid">
+                    <div class="recent-activity">
+                        <div class="section-header">
+                            <h2>Activité récente</h2>
+                            <a href="#" class="view-all">Voir tout</a>
+                        </div>
+                        <div class="activity-items" id="activity-items">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <div class="section-header">
+                            <h2>Actions rapides</h2>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-search"></i> Recherche rapide
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-prescription"></i> Nouvelle prescription
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-question-circle"></i> Assistance Arty
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Medicament Alerts -->
+                <section class="medicament-alerts">
+                    <div class="section-header">
+                        <h2>Alertes médicaments</h2>
+                        <a href="#" class="view-all">Voir tout</a>
+                    </div>
+                    <div class="alert-grid" id="medicament-alerts">
+                        <!-- Filled by JS -->
+                    </div>
+                </section>
+            </section>
+
+            <!-- Recherche Section -->
+            <section id="recherche" class="content-section">
+                <header class="header">
+                    <h1>Recherche de médicaments</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="filter-btn">
+                            <i class="fas fa-filter"></i> Filtres
+                        </button>
+                    </div>
+                </header>
+
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="medicament-search" placeholder="Rechercher un médicament...">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+
+                    <!-- Filters Panel (hidden by default) -->
+                    <div class="filters-panel" id="filters-panel">
+                        <div class="filter-group">
+                            <label for="category-filter">Catégorie</label>
+                            <select id="category-filter">
+                                <option value="">Toutes catégories</option>
+                                <option value="antibiotique">Antibiotique</option>
+                                <option value="antalgique">Antalgique</option>
+                                <option value="anti-inflammatoire">Anti-inflammatoire</option>
+                                <option value="antihistaminique">Antihistaminique</option>
+                                <option value="cardiologique">Cardiologique</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="symptom-filter">Symptôme/Pathologie</label>
+                            <select id="symptom-filter">
+                                <option value="">Tous symptômes</option>
+                                <option value="douleur">Douleur</option>
+                                <option value="fievre">Fièvre</option>
+                                <option value="allergie">Allergie</option>
+                                <option value="infection">Infection</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="prescription-filter">Type</label>
+                            <select id="prescription-filter">
+                                <option value="">Tous types</option>
+                                <option value="avec">Avec ordonnance</option>
+                                <option value="sans">Sans ordonnance</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="availability-filter">Disponibilité</label>
+                            <select id="availability-filter">
+                                <option value="">Tous</option>
+                                <option value="in-stock">En stock</option>
+                                <option value="low-stock">Stock faible</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-actions">
+                            <button class="btn btn-outline" id="reset-filters">
+                                Réinitialiser
+                            </button>
+                            <button class="btn btn-primary" id="apply-filters">
+                                Appliquer
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Results -->
+                    <div class="search-results">
+                        <div class="results-header">
+                            <h3>Résultats de recherche</h3>
+                            <div class="results-count">
+                                <span id="results-count">0</span> résultats trouvés
+                            </div>
+                        </div>
+
+                        <div class="medicament-list" id="medicament-list">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pharmacies Map Section -->
+            <div class="pharmacies-map-container" id="pharmacies-map-container">
+                <div class="map-header">
+                    <h3>Pharmacies disponibles</h3>
+                    <button class="btn btn-outline close-map">
+                        <i class="fas fa-times"></i> Fermer
+                    </button>
+                </div>
+                <div id="pharmacies-map"></div>
+                <div class="pharmacies-list" id="pharmacies-list">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Prescriptions Section -->
+            <section id="prescriptions" class="content-section">
+                <header class="header">
+                    <h1>Mes Prescriptions</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="new-prescription-btn">
+                            <i class="fas fa-plus"></i> Nouvelle
+                        </button>
+                    </div>
+                </header>
+
+                <div class="prescriptions-container">
+                    <div class="table-responsive">
+                        <table id="prescriptions-table">
+                            <thead>
+                                <tr>
+                                    <th>N° Prescription</th>
+                                    <th>Date</th>
+                                    <th>Patient</th>
+                                    <th>Médicaments</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prescriptions-list">
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historique Section -->
+            <section id="historique" class="content-section">
+                <header class="header">
+                    <h1>Historique des activités</h1>
+                </header>
+
+                <div class="history-container">
+                    <div class="history-tabs">
+                        <button class="tab-btn active" data-tab="recherches">Recherches</button>
+                        <button class="tab-btn" data-tab="prescriptions">Prescriptions</button>
+                        <button class="tab-btn" data-tab="consultations">Consultations</button>
+                    </div>
+
+                    <div class="tab-content active" id="recherches-tab">
+                        <div class="table-responsive">
+                            <table id="search-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Médicament</th>
+                                        <th>Catégorie</th>
+                                        <th>Résultats</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="search-history-list">
+                                    <!-- Filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="prescriptions-tab">
+                        <!-- Prescription history content -->
+                    </div>
+
+                    <div class="tab-content" id="consultations-tab">
+                        <!-- Consultation history content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paramètres Section -->
+            <section id="parametres" class="content-section">
+                <header class="header">
+                    <h1>Paramètres</h1>
+                </header>
+
+                <div class="settings-container">
+                    <!-- Similar to admin settings -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbot-container">
+        <div class="chatbot-header">
+            <div class="chatbot-avatar">
+                <img src="my-chatb.jpeg" alt="Arty">
+                <span>Arty - Assistance</span>
+            </div>
+            <button class="btn btn-icon close-chatbot">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+            <!-- Filled by JS -->
+        </div>
+        <div class="chatbot-input">
+            <input type="text" placeholder="Posez votre question...">
+            <button class="btn btn-icon">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chatbot Trigger -->
+    <button class="chatbot-trigger" id="chatbot-trigger">
+        <img src="../my-chatb.jpeg" alt="">
     </button>
-</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <script src="medecin.js"></script>
+    <script src="../auth.js"></script>
 </body>
-<script src="../auth.js"></script>
-<script src="medecin.js"></script>
 </html>

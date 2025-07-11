@@ -60,3 +60,36 @@ const dashboardData = {
         totalSales: 1250000
     }
 };
+
+// Extend the existing data object
+dashboardData.medecin = {
+    prescriptions: [
+        { id: "#PRS-001", date: "10/07/2023", patient: "Marie Akissi", medicaments: ["Paracétamol 500mg", "Ibuprofène 200mg"], statut: "active" },
+        { id: "#PRS-002", date: "08/07/2023", patient: "Jean Dupont", medicaments: ["Amoxicilline 500mg"], statut: "active" },
+        { id: "#PRS-003", date: "05/07/2023", patient: "Sophie Martin", medicaments: ["Doliprane 1000mg", "Vitamine C"], statut: "archived" }
+    ],
+    searchHistory: [
+        { date: "10/07/2023 09:15", medicament: "Paracétamol", categorie: "Antalgique", results: 12 },
+        { date: "09/07/2023 14:30", medicament: "Amoxicilline", categorie: "Antibiotique", results: 8 },
+        { date: "08/07/2023 11:20", medicament: "Ibuprofène", categorie: "Anti-inflammatoire", results: 15 }
+    ],
+    medicamentAlerts: [
+        { medicament: "Paracétamol 500mg", type: "rupture", date: "10/07/2023", pharmacies: 2 },
+        { medicament: "Amoxicilline 500mg", type: "stock-faible", date: "09/07/2023", pharmacies: 5 }
+    ],
+    activity: [
+        { type: "prescription", description: "Nouvelle prescription pour Marie Akissi", date: "10/07/2023 09:15" },
+        { type: "recherche", description: "Recherche de Paracétamol", date: "10/07/2023 09:10" },
+        { type: "consultation", description: "Consultation avec Jean Dupont", date: "09/07/2023 14:30" }
+    ],
+    pharmacies: [
+        { id: 1, name: "Pharmacie du Plateau", address: "Rue des Jardins, Plateau", stock: 15, lat: 5.3167, lng: -4.0333, open: "08:00-20:00", garde: true },
+        { id: 2, name: "Pharmacie des Deux Plateaux", address: "Avenue Jean-Paul II, Deux Plateaux", stock: 8, lat: 5.3267, lng: -4.0233, open: "08:00-22:00", garde: false },
+        { id: 3, name: "Pharmacie Yopougon", address: "Angle Rue 12, Yopougon", stock: 3, lat: 5.3367, lng: -4.0133, open: "07:00-21:00", garde: true }
+    ],
+    stats: {
+        prescriptions: 24,
+        recherches: 56,
+        alertes: 3
+    }
+};

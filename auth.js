@@ -80,7 +80,7 @@ class Auth {
                 redirectUrl = 'admin/admin-pharmacie.html';
                 break;
             case 'doctor':
-                redirectUrl = 'admin/medecin.html';
+                redirectUrl = './admin/medecin.html';
                 break;
             default:
                 redirectUrl = 'index.html';
