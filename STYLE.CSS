@@ -1,3 +1,20 @@
+/* Avatar chatbot dans le header */
+.chatbot-header img[alt="Avatar chatbot"] {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  margin-right: 2px;
+}
+
+@media (max-width: 600px) {
+  .chatbot-header img[alt="Avatar chatbot"] {
+    width: 28px;
+    height: 28px;
+    margin-right: 1px;
+  }
+}
 /* Variables CSS */
 :root {
     --primary-color: #22c55e;
