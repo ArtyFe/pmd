@@ -912,6 +912,7 @@ a {
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
+    margin-top: 10px;
     justify-content: center;
     z-index: 2000;
     opacity: 0;

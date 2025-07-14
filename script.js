@@ -262,4 +262,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialisation de la page
     document.querySelector('.main-nav a[data-page="home"]').classList.add('active');
     document.getElementById('home').classList.add('active');
+    
+    // Affichage du champ DUNS/NIF selon le rôle sélectionné
+    // Correction : le script doit s'exécuter après le DOM chargé
+    function initDunsNifToggle() {
+        var rolePatient = document.getElementById('role-patient');
+        var roleDoctor = document.getElementById('role-doctor');
+        var rolePharmacist = document.getElementById('role-pharmacist');
+        var dunsNifGroup = document.getElementById('duns-nif-group');
+
+        if (!rolePatient || !roleDoctor || !rolePharmacist || !dunsNifGroup) return;
+
+        function toggleDunsNif() {
+            if (roleDoctor.checked || rolePharmacist.checked) {
+                dunsNifGroup.style.display = 'block';
+            } else {
+                dunsNifGroup.style.display = 'none';
+            }
+        }
+
+        rolePatient.addEventListener('change', toggleDunsNif);
+        roleDoctor.addEventListener('change', toggleDunsNif);
+        rolePharmacist.addEventListener('change', toggleDunsNif);
+
+        toggleDunsNif();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDunsNifToggle);
+    } else {
+        initDunsNifToggle();
+    }
 });
