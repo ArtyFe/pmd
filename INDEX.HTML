@@ -30,6 +30,15 @@
                     <button class="btn btn-outline" id="login-btn"><i class="fas fa-sign-in-alt"></i> Connexion</button>
                     <button class="btn btn-primary" id="register-btn"><i class="fas fa-user-plus"></i> Inscription</button>
                 </div>
+                <div class="lang-switcher" style="margin-left:20px;">
+                  <select id="lang-select" style="padding:6px 12px;border-radius:8px;font-weight:600;">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="pt">Português</option>
+                    <option value="zh">中文</option>
+                  </select>
+                </div>
                 <button class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -45,7 +54,7 @@
                 <div class="container">
                     <div class="hero-content">
                         <h2>Votre santé, notre priorité</h2>
-                        <p>Trouvez les médicaments disponibles en temps réel dans les pharmacies de Port-Gentil</p>
+                        <p class="modern-glow">Trouvez les médicaments disponibles en temps réel dans les pharmacies de Port-Gentil</p>
                         <div class="search-box">
                             <input type="text" placeholder="Rechercher un médicament...">
                             <button class="btn btn-primary"><i class="fas fa-search"></i> Rechercher</button>
@@ -375,12 +384,12 @@
     <!-- Chatbot -->
     <div class="medical-chatbot">
         <div class="chatbot-toggle">
-            <img src="my-chatb.jpeg" alt="">
+            <img src="my-chatb.jpeg" alt="Avatar chatbot" style="width:40px;height:40px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
         </div>
         <div class="chatbot-window">
             <div class="chatbot-header">
                 <h4 style="display:flex;align-items:center;gap:10px;">
-                  <img src="my chatb.jpeg" alt="Avatar chatbot" style="width:36px;height:36px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.10);margin-right:2px;">
+                  <img src="my-chatb.jpeg" alt="Avatar chatbot" style="width:36px;height:36px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.10);margin-right:2px;">
                   Arty - Assistant médical
                 </h4>
                 <button class="close-chatbot"><i class="fas fa-times"></i></button>
@@ -495,5 +504,33 @@
 </div>
     <script src="script.js"></script>
     <script src="auth.js"></script>
+    <script src="lang-switcher.js"></script>
+</script>
+<style>
+.modern-glow {
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #17607a;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0 auto 18px auto;
+  box-shadow: none;
+  text-shadow: 0 2px 8px #fff, 0 1px 0 #fff;
+  letter-spacing: 0.5px;
+  transition: color 0.2s, text-shadow 0.2s;
+  cursor: pointer;
+  backdrop-filter: none;
+}
+.modern-glow:active, .modern-glow:focus, .modern-glow:hover {
+  color: #1a6fa3;
+  text-shadow: 0 2px 16px #1ecb8b, 0 1px 0 #fff;
+  background: none;
+  box-shadow: none;
+  transform: none;
+}
+</style>
 </body>
 </html>

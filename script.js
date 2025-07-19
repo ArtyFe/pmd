@@ -88,30 +88,76 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Réponses du chatbot
     function getBotResponse(message) {
-        const responses = {
-            'bonjour': 'Bonjour ! Comment puis-je vous aider aujourd\'hui ?',
-            'salut': 'Salut ! Je suis Arty, votre assistant médical. Que puis-je faire pour vous ?',
-            'aide': 'Je peux vous aider à :<br>- Trouver des médicaments<br>- Localiser des pharmacies<br>- Donner des informations sur les pharmacies de garde<br>- Vous orienter vers les numéros d\'urgence',
-            'médicament': 'Quel médicament recherchez-vous ? Je peux vérifier sa disponibilité dans nos pharmacies partenaires.',
-            'pharmacie': 'Voici nos pharmacies partenaires à Port-Gentil :<br>- Pharmacie Banco<br>- Pharmacie Cap<br>- Pharmacie Grand Village<br><br>Voulez-vous plus d\'informations sur une pharmacie en particulier ?',
-            'urgence': 'En cas d\'urgence médicale, contactez immédiatement le SAMU au 1300 ou rendez-vous à la pharmacie de garde la plus proche.',
-            'merci': 'Je vous en prie ! N\'hésitez pas si vous avez d\'autres questions.',
-            'au revoir': 'Au revoir ! Prenez soin de vous.',
-            'prix': 'Les prix des médicaments varient selon les pharmacies. Vous pouvez consulter les prix approximatifs dans la section "Médicaments".',
-            'disponibilité': 'Les stocks sont mis à jour en temps réel par nos pharmacies partenaires. Vous pouvez vérifier la disponibilité d\'un médicament spécifique en le recherchant.',
-            'heure': 'Les horaires d\'ouverture varient selon les pharmacies. Les pharmacies de garde sont ouvertes 24h/24.'
-        };
-        
-        // Recherche d'une correspondance dans le message
+        // Version démo intelligente personnalisée pour la santé
+        // Le chatbot comprend les symptômes courants, donne des conseils simples, oriente vers des médicaments en vente libre, invite à consulter si besoin, et reste bienveillant sans poser de diagnostic.
+        // Vous pouvez enrichir la liste des symptômes, les conseils, ou connecter à votre base de pharmacies/médicaments pour une intégration encore plus personnalisée.
+        if (
+            message.includes("qui es-tu") ||
+            message.includes("que sais-tu faire") ||
+            message.includes("présente-toi") ||
+            message.includes("assistant médical") ||
+            message.includes("démo intelligente")
+        ) {
+            return "Je suis une version démo intelligente et personnalisée : je comprends les symptômes courants, je donne des conseils simples, j'oriente vers des médicaments en vente libre, j'invite à consulter si besoin, et je reste bienveillant sans poser de diagnostic. Vous pouvez enrichir la liste des symptômes, les conseils, ou connecter à votre base de pharmacies/médicaments pour une intégration encore plus personnalisée.";
+        }
         message = message.toLowerCase();
-        for (const [keyword, response] of Object.entries(responses)) {
-            if (message.includes(keyword)) {
-                return response;
+        // Table de symptômes enrichie (exemples, extensible)
+        const symptomes = [
+            {
+                mots: ["gorge", "toux", "tousser", "enroué", "mal à la gorge"],
+                conseil: "Un mal de gorge accompagné d'une toux légère peut être dû à un rhume ou à une irritation.<br>Voici quelques solutions disponibles sans ordonnance :<ul><li>Pastilles à base de menthol ou d’eucalyptus pour soulager la gorge.</li><li>Sirop contre la toux sèche si la toux est irritante.</li><li>Boire beaucoup d’eau tiède et éviter les boissons glacées.</li></ul>👉 Vous pouvez vérifier la disponibilité de ces produits dans les pharmacies proches via AKiba.<br>⚠️ Si les symptômes durent plus de 3 jours, s’aggravent ou s’accompagnent de fièvre élevée, consultez un médecin."
+            },
+            {
+                mots: ["fièvre", "fievre", "température", "thermomètre", "frissons"],
+                conseil: "Pour une fièvre légère, il est conseillé de bien s’hydrater et de se reposer.<br>Le paracétamol est généralement utilisé pour faire baisser la fièvre.<br>👉 Vérifiez la disponibilité du paracétamol dans les pharmacies proches via AKiba.<br>⚠️ Consultez un médecin si la fièvre dépasse 39°C, dure plus de 3 jours ou s’accompagne de maux inhabituels."
+            },
+            {
+                mots: ["mal de tête", "migraine", "céphalée", "tête", "maux de tête"],
+                conseil: "Pour un mal de tête léger, le paracétamol ou l’ibuprofène peuvent aider à soulager la douleur.<br>Essayez de vous reposer dans un endroit calme et de bien vous hydrater.<br>👉 Ces médicaments sont disponibles sans ordonnance dans la plupart des pharmacies.<br>⚠️ Si le mal de tête est intense, inhabituel ou accompagné d’autres symptômes (fièvre, troubles de la vision), consultez un professionnel de santé."
+            },
+            {
+                mots: ["ventre", "douleur abdominale", "crampe", "mal au ventre", "diarrhée", "constipation", "nausée", "vomir"],
+                conseil: "Pour des douleurs abdominales légères, privilégiez une alimentation légère et buvez de l’eau.<br>Des antispasmodiques ou du paracétamol peuvent être utilisés pour soulager la douleur.<br>En cas de diarrhée, pensez à la réhydratation orale.<br>👉 Demandez conseil à votre pharmacien pour le choix du médicament.<br>⚠️ Consultez un médecin si la douleur est intense, persistante ou accompagnée de fièvre/vomissements."
+            },
+            {
+                mots: ["mal aux dents", "mal de dent", "douleur dentaire", "rage de dent", "dents", "dent"],
+                conseil: "Pour un mal de dents, il est conseillé de prendre un antalgique comme le paracétamol (sauf contre-indication) et d’éviter les aliments trop chauds ou trop froids.<br>👉 Consultez rapidement un dentiste, surtout si la douleur est intense, persistante, ou accompagnée de fièvre ou de gonflement.<br>⚠️ En cas de gonflement important du visage ou de difficulté à ouvrir la bouche, rendez-vous aux urgences ou contactez un professionnel de santé sans attendre."
+            },
+            {
+                mots: ["allergie", "allergique", "éternuement", "nez qui coule", "rhume des foins"],
+                conseil: "Pour les symptômes d’allergie (éternuements, nez qui coule), des antihistaminiques en vente libre peuvent aider.<br>👉 Demandez conseil à votre pharmacien et vérifiez la disponibilité sur AKiba.<br>⚠️ Consultez un médecin si les symptômes sont sévères ou s’aggravent."
+            },
+            {
+                mots: ["brûlure", "brulure", "coupure", "plaie", "blessure"],
+                conseil: "Pour une petite brûlure ou coupure, rincez à l’eau claire, désinfectez et protégez avec un pansement.<br>Des crèmes cicatrisantes sont disponibles en pharmacie.<br>⚠️ Consultez un professionnel si la blessure est profonde, étendue ou s’infecte."
+            }
+        ];
+        // Recherche de symptôme dans le message (tolérance aux fautes et langage simple)
+        for (const symptome of symptomes) {
+            for (const mot of symptome.mots) {
+                if (message.includes(mot)) {
+                    return symptome.conseil;
+                }
             }
         }
-        
-        // Réponse par défaut
-        return 'Je ne suis pas sûr de comprendre. Pouvez-vous reformuler votre question ? Voici ce que je peux faire :<br>- Vous aider à trouver un médicament<br>- Vous indiquer les pharmacies proches<br>- Vous donner les numéros d\'urgence<br>- Vous informer sur les pharmacies de garde';
+        // Réponses génériques personnalisées
+        if (message.includes("bonjour") || message.includes("salut")) {
+            return "Bonjour ! Je suis Arty, votre assistant santé. Décrivez-moi vos symptômes ou votre question médicale, je vous oriente avec bienveillance.";
+        }
+        if (message.includes("merci") || message.includes("thanks")) {
+            return "Avec plaisir ! N’hésitez pas si vous avez d’autres questions santé.";
+        }
+        if (message.includes("pharmacie") || message.includes("pharmacies")) {
+            return "Voici quelques pharmacies partenaires à Port-Gentil :<br>- Pharmacie Banco<br>- Pharmacie Cap<br>- Pharmacie Grand Village<br>Vous pouvez vérifier la disponibilité des médicaments sur AKiba.";
+        }
+        if (message.includes("urgence") || message.includes("urgent")) {
+            return "En cas d’urgence médicale, contactez immédiatement le SAMU au 1300 ou rendez-vous à la pharmacie de garde la plus proche.";
+        }
+        if (message.includes("médicament") || message.includes("medicament") || message.includes("médicaments")) {
+            return "Quel médicament recherchez-vous ? Je peux vous indiquer les usages courants et la disponibilité en pharmacie.";
+        }
+        // Réponse par défaut bienveillante
+        return "Je suis Arty, assistant santé AKiba. Décrivez-moi vos symptômes ou votre question, je vous oriente avec des conseils simples et des solutions en pharmacie. Si vos symptômes sont graves ou inhabituels, consultez un professionnel de santé.";
     }
     
     // Gestion des modales de connexion/inscription

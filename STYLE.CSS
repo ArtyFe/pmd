@@ -1,3 +1,44 @@
+/* Espacement à droite du bouton Urgence dans le header */
+.main-nav ul li:last-child {
+  margin-right: 18px;
+}
+/* Header : logo à gauche, langue à droite */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo-medical {
+  margin-right: auto;
+}
+.lang-switcher {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+/* Espacement entre les boutons de connexion/inscription dans le header */
+.auth-buttons {
+  display: flex;
+  gap: 12px;
+}
+/* Effet lumineux 3D pour le sélecteur multilingue */
+#lang-select {
+  background: #fff;
+  color: #1a6fa3;
+  border: 2px solid #1a6fa3;
+  box-shadow: 0 2px 8px rgba(26, 111, 163, 0.10);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+  outline: none;
+}
+#lang-select:focus, #lang-select:hover {
+  border-color: #1ecb8b;
+  box-shadow: 0 0 0 4px rgba(30, 203, 139, 0.25), 0 4px 16px rgba(26, 111, 163, 0.18);
+  background: linear-gradient(90deg, #1a6fa3 0%, #1ecb8b 100%);
+  color: #fff;
+  transform: scale(1.04) perspective(80px) translateY(-2px) rotateX(2deg);
+}
+#lang-select option {
+  color: #1a6fa3;
+}
 /* Avatar chatbot dans le header */
 .chatbot-header img[alt="Avatar chatbot"] {
   width: 36px;
